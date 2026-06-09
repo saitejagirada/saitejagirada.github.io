@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Transformer Architecture</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+
+    background-color:#fafafa;
+
+    background-image:
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+
+    background-size:48px 48px;
+
+    color:#222;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+    padding:80px 40px;
+}
+
+h1{
+    font-size:3.5rem;
+    font-weight:800;
+    margin-bottom:25px;
+    color:#111;
+}
+
+h2{
+    font-size:2rem;
+    margin-top:50px;
+    margin-bottom:20px;
+    font-weight:700;
+}
+
+p{
+    font-size:1.25rem;
+    line-height:1.9;
+    margin-bottom:28px;
+}
+
+.highlight{
+    background:#fff8c5;
+    padding:3px 8px;
+    border-radius:6px;
+}
+
+.architecture{
+    margin:35px 0;
+    display:flex;
+    justify-content:center;
+    gap:120px;
+    font-size:1.5rem;
+    font-weight:700;
+}
+
+.box{
+    background:white;
+    border:1px solid #e4e4e4;
+    padding:25px;
+    border-radius:16px;
+    margin:30px 0;
+}
+
+ul{
+    margin-left:30px;
+}
+
+li{
+    font-size:1.2rem;
+    margin-bottom:12px;
+    line-height:1.7;
+}
+
+.question{
+    font-size:1.4rem;
+    font-weight:600;
+    margin:25px 0;
+}
+
+.answer{
+    color:#2563eb;
+    font-weight:700;
+}
+
+img{
+    width:100%;
+    border-radius:18px;
+    margin:35px 0;
+}
+
+.note{
+    border-left:5px solid #111;
+    padding-left:20px;
+    font-style:italic;
+    color:#555;
+    margin:30px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Understanding Transformer Architecture</h1>
+<p><a href="blog1.html" style="font-size:1.2rem;color:#2563eb;text-decoration:none;">Read Transformer Encoder Blog</a></p>
+
+<p>
+Before we start Transformer Architecture, let's build an intuition about
+how data is processed.
+</p>
+
+<p>
+Think of a Transformer as a device that takes some input and spends some
+time learning from it during the <span class="highlight">training phase</span>.
+After training, it becomes capable of understanding relationships between
+words and generating meaningful outputs.
+</p>
+
+<p>
+Even if a Transformer is not trained, it can still generate output.
+However, the output will mostly consist of random and meaningless tokens.
+Training is what allows the model to learn useful patterns from data.
+</p>
+
+<div class="note">
+    the input vectors are not unit vectors mean the magnitude of vector vary i.e the same vector(word) may not pay much attention to itself
+
+    |B>B|<|B.D|
+
+These vectors consist of a semantic meaning that means if we consider an end dimensional space each word represent a position that indicates it has a certain meaning in that position, and the similar kind of words or synonyms will be surrounded to the similar vector
+
+
+</div>
+
+<h2>High Level Architecture</h2>
+
+<p>
+At a basic level, a Transformer consists of two major components.
+</p>
+
+<div class="architecture">
+<div>The Encoder</div>
+<div>The Decoder</div>
+</div>
+
+<p class="question">
+Before we interact with any model, it first needs training. So where does
+this learning happen?
+</p>
+
+<p>
+The answer is: <span class="answer">inside the Encoder.</span>
+</p>
+
+<p>
+Let's take a quick look at the Encoder before diving deeper.
+</p>
+
+
+
+<p>
+We will understand each of these components in detail shortly. For now,
+let's continue with the training process.
+</p>
+
+<h2>How Training Happens</h2>
+
+<p>
+If you have recently learned about Diffusion Models or CNNs, keep that
+knowledge aside for a moment and follow the flow. Transformers process
+information very differently from Convolutional Neural Networks.
+</p>
+
+<p>
+Let's assume we have a text file as our dataset.
+</p>
+
+<p>
+Computers cannot directly understand words. Therefore, the text is first
+converted into numerical values. These values are usually stored as
+vectors inside a data structure called a <b>Tensor</b>.
+</p>
+
+<p>
+These tensors are then passed through the Transformer, where the model
+learns relationships between words, context, and meaning.
+</p>
+
+</div>
+
+</body>
+</html>
