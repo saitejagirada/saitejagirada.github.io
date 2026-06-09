@@ -3,212 +3,494 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Transformer Architecture</title>
+<meta name="description" content="Sai Teja Girada — CS undergrad at MVGR College of Engineering. Deep learning, NLP, efficient ML systems, and reinforcement learning.">
+<title>Sai Teja Girada</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <style>
+/* ══════════════════════════════════════════════
+   RESET & VARIABLES (Minty Bootstrap theme)
+   ══════════════════════════════════════════════ */
+*{ margin:0; padding:0; box-sizing:border-box; }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+:root{
+    --primary:     #78c2ad;
+    --primary-hover:#60a894;
+    --secondary:   #f3969a;
+    --body-color:  #5a5a5a;
+    --heading-color:#5a5a5a;
+    --bg:          #ffffff;
+    --border:      #dee2e6;
+    --gray-100:    #f8f9fa;
+    --gray-200:    #f7f7f9;
+    --font-body:   system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-heading: "Montserrat", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --root-font-size: 17px;
 }
+
+html{ font-size:var(--root-font-size); }
 
 body{
-    font-family:'Inter',sans-serif;
-
-    background-color:#fafafa;
-
-    background-image:
-        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
-
-    background-size:48px 48px;
-
-    color:#222;
+    font-family:var(--font-body);
+    font-size:1rem;
+    font-weight:400;
+    line-height:1.5;
+    color:var(--body-color);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
 }
 
-.container{
-    max-width:800px;
-    margin:auto;
-    padding:80px 40px;
+a{
+    color:var(--primary);
+    text-decoration:underline;
+}
+a:hover{
+    color:var(--primary-hover);
 }
 
-h1{
-    font-size:3.5rem;
-    font-weight:800;
-    margin-bottom:25px;
-    color:#111;
+h1,h2,h3,h4,h5,h6{
+    font-family:var(--font-heading);
+    font-weight:500;
+    line-height:1.2;
+    color:var(--heading-color);
 }
 
-h2{
-    font-size:2rem;
-    margin-top:50px;
-    margin-bottom:20px;
-    font-weight:700;
+/* ══════════════════════════════════════════════
+   NAVBAR — Dark, fixed top (like Vibha's)
+   ══════════════════════════════════════════════ */
+.navbar{
+    background:#343a40;
+    padding:0;
+    position:sticky;
+    top:0;
+    z-index:1000;
 }
-
-p{
-    font-size:1.25rem;
-    line-height:1.9;
-    margin-bottom:28px;
-}
-
-.highlight{
-    background:#fff8c5;
-    padding:3px 8px;
-    border-radius:6px;
-}
-
-.architecture{
-    margin:35px 0;
+.navbar-inner{
+    max-width:1320px;
+    margin:0 auto;
     display:flex;
-    justify-content:center;
-    gap:120px;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 1.5rem;
+    height:56px;
+}
+.navbar-brand{
+    font-family:var(--font-heading);
+    font-weight:500;
+    font-size:1.15rem;
+    color:#fff;
+    text-decoration:none;
+}
+.navbar-brand:hover{ color:#fff; }
+
+.nav-links{
+    list-style:none;
+    display:flex;
+    gap:0;
+}
+.nav-links a{
+    display:block;
+    padding:16px 16px;
+    font-size:0.9rem;
+    color:rgba(255,255,255,0.55);
+    text-decoration:none;
+    transition:color .15s;
+}
+.nav-links a:hover,
+.nav-links a.active{
+    color:rgba(255,255,255,0.85);
+}
+
+/* Hamburger */
+.menu-btn{
+    display:none;
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:rgba(255,255,255,0.55);
     font-size:1.5rem;
+}
+
+/* ══════════════════════════════════════════════
+   ABOUT — Trestles Layout (image | divider | bio)
+   ══════════════════════════════════════════════ */
+.about-section{
+    max-width:1320px;
+    margin:0 auto;
+    padding:3rem 1.5rem;
+    display:flex;
+    gap:0;
+    align-items:flex-start;
+}
+
+/* Left: Avatar + Name + Links */
+.about-entity{
+    flex:0 0 300px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding-right:2rem;
+}
+.about-image{
+    width:10em;
+    height:10em;
+    border-radius:50%;
+    object-fit:cover;
+    margin-bottom:1rem;
+}
+/* Placeholder when no photo */
+.about-avatar-placeholder{
+    width:7em; height:7em;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--primary), #56cc9d);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-heading);
+    font-size:2.8rem;
     font-weight:700;
+    color:#fff;
+    margin-bottom:1rem;
+}
+.about-entity h1{
+    font-size:calc(1.325rem + 0.9vw);
+    margin-bottom:0.8rem;
+}
+@media(min-width:1200px){
+    .about-entity h1{ font-size:2rem; }
 }
 
-.box{
-    background:white;
-    border:1px solid #e4e4e4;
-    padding:25px;
-    border-radius:16px;
-    margin:30px 0;
-}
-
-ul{
-    margin-left:30px;
-}
-
-li{
-    font-size:1.2rem;
-    margin-bottom:12px;
-    line-height:1.7;
-}
-
-.question{
-    font-size:1.4rem;
-    font-weight:600;
-    margin:25px 0;
-}
-
-.answer{
-    color:#2563eb;
-    font-weight:700;
-}
-
-img{
+.about-links{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
     width:100%;
-    border-radius:18px;
-    margin:35px 0;
+    margin-top:0.5rem;
+}
+.about-links a{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    justify-content:center;
+    padding:8px 16px;
+    border:1px solid var(--primary);
+    border-radius:0.25rem;
+    color:var(--primary);
+    text-decoration:none;
+    font-size:0.88rem;
+    transition:all .15s;
+}
+.about-links a:hover{
+    background:var(--primary);
+    color:#fff;
+}
+.about-links a i{
+    font-size:1rem;
 }
 
-.note{
-    border-left:5px solid #111;
-    padding-left:20px;
+/* Vertical divider */
+.about-divider{
+    width:1px;
+    background:var(--border);
+    align-self:stretch;
+    flex-shrink:0;
+}
+
+/* Right: Bio text */
+.about-contents{
+    flex:1;
+    padding-left:2rem;
+    padding-top:0.5rem;
+}
+.about-contents p{
+    margin-bottom:1rem;
+    font-size:1rem;
+    line-height:1.5;
+    color:var(--body-color);
+}
+.about-contents h3{
+    font-size:calc(1.27rem + 0.24vw);
+    margin-top:1.5rem;
+    margin-bottom:0.5rem;
+}
+@media(min-width:1200px){
+    .about-contents h3{ font-size:1.45rem; }
+}
+
+/* ══════════════════════════════════════════════
+   GENERIC SECTION (Education, Experience, etc.)
+   ══════════════════════════════════════════════ */
+.content-section{
+    max-width:1320px;
+    margin:0 auto;
+    padding:2rem 1.5rem 2.5rem;
+    border-top:1px solid var(--border);
+}
+.content-section h2{
+    font-size:calc(1.29rem + 0.48vw);
+    margin-bottom:1.2rem;
+}
+@media(min-width:1200px){
+    .content-section h2{ font-size:1.65rem; }
+}
+
+.content-section p,
+.content-section li{
+    font-size:1rem;
+    line-height:1.5;
+    color:var(--body-color);
+}
+.content-section ul{
+    padding-left:2rem;
+    margin-bottom:1rem;
+}
+.content-section li{
+    margin-bottom:0.3rem;
+}
+
+/* Card-like block */
+.info-block{
+    margin-bottom:1.5rem;
+}
+.info-block h3{
+    font-size:calc(1.27rem + 0.24vw);
+    margin-bottom:0.25rem;
+}
+@media(min-width:1200px){
+    .info-block h3{ font-size:1.45rem; }
+}
+.info-block .subtitle{
+    font-size:0.95rem;
+    color:var(--body-color);
+    margin-bottom:0.5rem;
+}
+.info-block .meta{
+    font-size:0.88rem;
+    color:#888;
+    margin-bottom:0.5rem;
     font-style:italic;
-    color:#555;
-    margin:30px 0;
 }
 
+/* Skills tags */
+.skill-row{
+    margin-bottom:0.8rem;
+}
+.skill-row strong{
+    color:var(--heading-color);
+}
+
+/* Blog link list */
+.blog-list{
+    list-style:none;
+    padding:0;
+}
+.blog-list li{
+    padding:0.5rem 0;
+    border-bottom:1px solid var(--gray-200);
+}
+.blog-list li:last-child{ border-bottom:none; }
+.blog-list a{
+    font-size:1rem;
+    color:var(--primary);
+}
+.blog-list a:hover{
+    color:var(--primary-hover);
+}
+.blog-list .blog-desc{
+    font-size:0.88rem;
+    color:#888;
+    margin-top:2px;
+}
+
+/* ══════════════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════════════ */
+.footer{
+    text-align:center;
+    padding:2rem 1rem;
+    font-size:0.85rem;
+    color:#aaa;
+    border-top:1px solid var(--border);
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════ */
+@media(max-width:768px){
+    .menu-btn{ display:block; }
+    .nav-links{
+        display:none;
+        flex-direction:column;
+        position:absolute;
+        top:56px; left:0; right:0;
+        background:#343a40;
+        padding:8px 0;
+    }
+    .nav-links.open{ display:flex; }
+    .nav-links a{ padding:10px 24px; }
+
+    .about-section{
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+    }
+    .about-entity{
+        flex:none;
+        padding-right:0;
+        margin-bottom:1.5rem;
+    }
+    .about-divider{ display:none; }
+    .about-contents{
+        padding-left:0;
+        text-align:left;
+    }
+}
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<!-- ══════════ NAVBAR ══════════ -->
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a class="navbar-brand" href="#">Sai Teja Girada</a>
+        <button class="menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+            <i class="bi bi-list"></i>
+        </button>
+        <ul class="nav-links">
+            <li><a href="#" class="active">About</a></li>
+            <li><a href="#">Notes</a></li>
+            <li><a href="#">Projects</a></li>
+            <li><a href="#">Publications</a></li>
+            <li><a href="#">Teaching</a></li>
+            <li><a href="#">Resume</a></li>
+        </ul>
+    </div>
+</nav>
 
-<h1>Understanding Transformer Architecture</h1>
-<p><a href="blog1.html" style="font-size:1.2rem;color:#2563eb;text-decoration:none;">Read Transformer Encoder Blog</a></p>
+<!-- ══════════ ABOUT — Trestles Layout ══════════ -->
+<section class="about-section">
 
-<p>
-Before we start Transformer Architecture, let's build an intuition about
-how data is processed.
-</p>
+    <!-- Left column: Avatar + Name + Links -->
+    <div class="about-entity">
+        <img src="blog_images/teja.jpeg" alt="Sai Teja Girada" class="about-image">
+        <h1>Sai Teja Girada</h1>
+        <div class="about-links">
+            <a href="#"><i class="bi bi-linkedin"></i> linkedin</a>
+            <a href="#"><i class="bi bi-github"></i> github</a>
+            <a href="#"><i class="bi bi-envelope-fill"></i> saitejagirada at gmail dot com</a>
+            <a href="#"><i class="bi bi-file-earmark-text"></i> resume</a>
+        </div>
+    </div>
 
-<p>
-Think of a Transformer as a device that takes some input and spends some
-time learning from it during the <span class="highlight">training phase</span>.
-After training, it becomes capable of understanding relationships between
-words and generating meaningful outputs.
-</p>
+    <!-- Vertical divider -->
+    <div class="about-divider"></div>
 
-<p>
-Even if a Transformer is not trained, it can still generate output.
-However, the output will mostly consist of random and meaningless tokens.
-Training is what allows the model to learn useful patterns from data.
-</p>
+    <!-- Right column: Bio -->
+    <div class="about-contents">
+        <p>
+            Hi there 👋! I'm a Computer Science undergrad at
+            <a href="#">M.V.G.R College of Engineering</a>, Visakhapatnam.
+            My interests are in building efficient and interpretable machine learning systems.
+            I'm currently a Research Intern at
+            <a href="#">NIT Jamshedpur</a> working under Prof. Dinesh Kumar.
+            You can find my <a href="#">projects</a>, my
+            <a href="blog1.html">blog</a> and my
+            <a href="#">resume</a>.
+        </p>
+        <p>
+            At NIT Jamshedpur, I'm designing a FedMARL architecture that integrates
+            federated learning with multi-agent reinforcement learning for distributed
+            decision-making in edge networks. I focus on adaptive aggregation,
+            communication-efficient training, and heterogeneous agent environments.
+            Previously, I've worked on historical document OCR with vision-language models,
+            GPT-style transformers with KV cache optimization, audio event detection,
+            and text classification with GloVe embeddings.
+        </p>
 
-<div class="note">
-    the input vectors are not unit vectors mean the magnitude of vector vary i.e the same vector(word) may not pay much attention to itself
+        <h3>Research Interests</h3>
+        <p>
+            Deep learning model evaluation and interpretability · Efficient fine-tuning
+            and representation learning · Audio signal processing and event detection ·
+            Machine learning systems and deployment pipelines
+        </p>
 
-    |B>B|<|B.D|
+        <h3>Education</h3>
+        <p>
+            <strong>B.Tech, Computer Science and Engineering</strong><br>
+            M.V.G.R College of Engineering, Visakhapatnam (2023 – 2027)<br>
+            GPA: 7.73/10.00<br>
+            <em>Courses: Natural Language Processing, Machine Learning, Data Analytics, Big Data</em>
+        </p>
 
-These vectors consist of a semantic meaning that means if we consider an end dimensional space each word represent a position that indicates it has a certain meaning in that position, and the similar kind of words or synonyms will be surrounded to the similar vector
+        <h3>Experience</h3>
+        <p>
+            <strong>Research Intern</strong> — NIT Jamshedpur (May 2026 – Present)<br>
+            <em>Prof. Dinesh Kumar</em>
+        </p>
+        <ul>
+            <li>Designing a FedMARL architecture integrating federated learning with multi-agent RL for distributed decision-making in edge networks.</li>
+            <li>Working on adaptive aggregation, communication-efficient training, and heterogeneous agent environments.</li>
+            <li>Conducting simulation-based evaluation of latency, energy consumption, resource utilization, and learning performance.</li>
+        </ul>
 
+        <h3>Projects</h3>
 
-</div>
+        <p><strong>Hybrid Vision-Language Pipeline for Historical Document OCR & Correction</strong>
+            <em>(OpenCV, Florence-2, Gemini)</em></p>
+        <ul>
+            <li>Designed a multi-stage pipeline combining layout analysis, VLM, and language modeling to extract and correct text from complex multi-column historical documents.</li>
+            <li>Applied OpenCV-based projection profiling to segment layouts and preserve reading order.</li>
+            <li>Utilized Florence-2 for OCR and Gemini 1.5 for semantic reconstruction.</li>
+            <li>Evaluated using CER, WER, MER, and WIL metrics.</li>
+        </ul>
 
-<h2>High Level Architecture</h2>
+        <p><strong>GPT-Styled Transformer with KV Cache</strong>
+            <em>(HuggingFace, PyTorch)</em></p>
+        <ul>
+            <li>Implemented a GPT-style Transformer from scratch with KV cache optimization for autoregressive inference.</li>
+            <li>Reduced per-token attention complexity from O(T²) to O(T), achieving ~10–30× faster decoding.</li>
+        </ul>
 
-<p>
-At a basic level, a Transformer consists of two major components.
-</p>
+        <p><strong>Snapping Siri — Voice Assistant System</strong>
+            <em>(Python, PyPI)</em></p>
+        <ul>
+            <li>Built a modular app that detects snap sounds to activate Siri.</li>
+            <li>Collected a custom dataset and trained an audio classification model for noisy conditions.</li>
+        </ul>
 
-<div class="architecture">
-<div>The Encoder</div>
-<div>The Decoder</div>
-</div>
+        <p><strong>Text Classification using GloVe Embeddings</strong>
+            <em>(NLP, BERT, PyTorch)</em></p>
+        <ul>
+            <li>Implemented a text classification pipeline using pre-trained GloVe embeddings.</li>
+            <li>Designed and trained a neural network classifier for supervised text categorization.</li>
+        </ul>
 
-<p class="question">
-Before we interact with any model, it first needs training. So where does
-this learning happen?
-</p>
+        <h3>Skills</h3>
+        <div class="skill-row"><strong>Languages:</strong> Python, Java, SQL, C/C++</div>
+        <div class="skill-row"><strong>Cloud & Tools:</strong> Azure, AWS, Git, Azure ML</div>
+        <div class="skill-row"><strong>Libraries:</strong> PyTorch, pandas, NumPy, scikit-learn, HuggingFace, NLTK</div>
+        <div class="skill-row"><strong>ML Expertise:</strong> Pre-training, fine-tuning, post-training, RL, interpretability, ML systems</div>
 
-<p>
-The answer is: <span class="answer">inside the Encoder.</span>
-</p>
+        <h3>Blog</h3>
+        <ul class="blog-list">
+            <li>
+                <a href="blog1.html">Understanding the Transformer Encoder</a>
+                <div class="blog-desc">A deep-dive into attention, Q/K/V matrices, and how training works.</div>
+            </li>
+        </ul>
 
-<p>
-Let's take a quick look at the Encoder before diving deeper.
-</p>
+    </div>
+</section>
 
-
-
-<p>
-We will understand each of these components in detail shortly. For now,
-let's continue with the training process.
-</p>
-
-<h2>How Training Happens</h2>
-
-<p>
-If you have recently learned about Diffusion Models or CNNs, keep that
-knowledge aside for a moment and follow the flow. Transformers process
-information very differently from Convolutional Neural Networks.
-</p>
-
-<p>
-Let's assume we have a text file as our dataset.
-</p>
-
-<p>
-Computers cannot directly understand words. Therefore, the text is first
-converted into numerical values. These values are usually stored as
-vectors inside a data structure called a <b>Tensor</b>.
-</p>
-
-<p>
-These tensors are then passed through the Transformer, where the model
-learns relationships between words, context, and meaning.
-</p>
-
-</div>
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+    Sai Teja Girada · 2025
+</footer>
 
 </body>
 </html>
