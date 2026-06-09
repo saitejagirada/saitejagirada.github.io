@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A deep-dive into the Transformer Encoder architecture — from input embeddings and positional encoding to multi-head attention and Q, K, V weight matrices.">
+<title>Understanding the Transformer Encoder</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ── Reset ───────────────────────────────────── */
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+/* ── Body & Grid Background ──────────────────── */
+body{
+    font-family:'Inter',sans-serif;
+    background-color:#fafafa;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+    background-size:48px 48px;
+    color:#333;
+    -webkit-font-smoothing:antialiased;
+}
+
+/* ── Back Link ───────────────────────────────── */
+.back-link{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:0.95rem; font-weight:500; color:#2563eb;
+    text-decoration:none; margin-bottom:40px;
+    transition:color .2s, transform .2s;
+}
+.back-link:hover{ color:#1d4ed8; transform:translateX(-3px); }
+.back-link svg{ width:18px; height:18px; }
+
+/* ── Container ───────────────────────────────── */
+.container{
+    max-width:800px;
+    margin:0 auto;
+    padding:60px 40px 100px;
+}
+
+/* ── Hero / Title ────────────────────────────── */
+.blog-meta{
+    display:flex; align-items:center; gap:10px;
+    font-size:0.85rem; color:#888; margin-bottom:14px;
+    font-weight:500; letter-spacing:0.02em;
+}
+.blog-meta .dot{ width:4px; height:4px; border-radius:50%; background:#ccc; }
+
+h1{
+    font-size:clamp(2.2rem, 5vw, 3.2rem);
+    font-weight:800;
+    line-height:1.15;
+    color:#111;
+    margin-bottom:18px;
+    letter-spacing:-0.02em;
+}
+
+.subtitle{
+    font-size:1.2rem;
+    line-height:1.7;
+    color:#555;
+    margin-bottom:50px;
+    max-width:640px;
+}
+
+/* ── Section Headings ────────────────────────── */
+h2{
+    font-size:1.75rem;
+    font-weight:700;
+    color:#111;
+    margin-top:60px;
+    margin-bottom:22px;
+    letter-spacing:-0.01em;
+}
+
+h3{
+    font-size:1.3rem;
+    font-weight:600;
+    color:#222;
+    margin-top:40px;
+    margin-bottom:16px;
+}
+
+/* ── Paragraphs ──────────────────────────────── */
+p{
+    font-size:1.15rem;
+    line-height:1.9;
+    margin-bottom:24px;
+    color:#333;
+}
+
+/* ── Highlight Span ──────────────────────────── */
+.highlight{
+    background:linear-gradient(120deg, #fff8c5 0%, #fef08a 100%);
+    padding:2px 8px;
+    border-radius:5px;
+    font-weight:500;
+}
+
+/* ── Architecture Pill Row ───────────────────── */
+.architecture{
+    margin:35px 0;
+    display:flex;
+    justify-content:center;
+    gap:60px;
+    flex-wrap:wrap;
+}
+.architecture .arch-col{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+}
+.architecture .pill{
+    background:white;
+    border:1.5px solid #e2e2e2;
+    padding:16px 38px;
+    border-radius:14px;
+    font-size:1.25rem;
+    font-weight:700;
+    color:#111;
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+    transition:transform .2s, box-shadow .2s;
+}
+.architecture .pill:hover{
+    transform:translateY(-3px);
+    box-shadow:0 6px 20px rgba(0,0,0,0.08);
+}
+.architecture .arch-col img{
+    max-width:200px;
+    width:100%;
+    border-radius:14px;
+    border:1px solid #e8e8e8;
+    box-shadow:0 4px 20px rgba(0,0,0,0.06);
+    transition:transform .3s, box-shadow .3s;
+}
+.architecture .arch-col img:hover{
+    transform:scale(1.03);
+    box-shadow:0 8px 30px rgba(0,0,0,0.1);
+}
+
+/* ── Encoder Component List ──────────────────── */
+.component-list{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin:20px 0 30px;
+}
+.component-list li{
+    background:white;
+    border:1px solid #eee;
+    border-radius:10px;
+    padding:12px 20px;
+    font-size:1.05rem;
+    font-weight:500;
+    color:#333;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.03);
+    transition:transform .15s;
+}
+.component-list li:hover{ transform:translateX(4px); }
+.component-list li .num{
+    width:28px; height:28px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.75rem; font-weight:700;
+    flex-shrink:0;
+}
+
+/* ── Note / Callout Box ──────────────────────── */
+.note{
+    border-left:4px solid #2563eb;
+    background:linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+    padding:20px 24px;
+    border-radius:0 12px 12px 0;
+    margin:30px 0;
+    font-size:1rem;
+    line-height:1.7;
+    color:#444;
+}
+.note strong{ color:#1e40af; }
+
+/* ── Question / Answer ───────────────────────── */
+.question{
+    font-size:1.2rem;
+    font-weight:600;
+    color:#111;
+    margin:28px 0 10px;
+}
+.answer{
+    color:#2563eb;
+    font-weight:700;
+}
+
+/* ── Images ──────────────────────────────────── */
+.blog-img{
+    width:100%;
+    border-radius:16px;
+    margin:35px 0;
+    border:1px solid #e8e8e8;
+    box-shadow:0 4px 20px rgba(0,0,0,0.06);
+    transition:transform .3s, box-shadow .3s;
+}
+.blog-img:hover{
+    transform:scale(1.01);
+    box-shadow:0 8px 30px rgba(0,0,0,0.1);
+}
+
+/* ── Side-by-side Encoder / Decoder diagrams ── */
+.diagram-row{
+    display:flex;
+    gap:60px;
+    justify-content:center;
+    align-items:flex-start;
+    margin:40px 0;
+    flex-wrap:wrap;
+}
+.diagram-row img{
+    max-width:200px;
+    width:100%;
+    border-radius:16px;
+    border:1px solid #e8e8e8;
+    box-shadow:0 4px 20px rgba(0,0,0,0.06);
+    transition:transform .3s, box-shadow .3s;
+}
+.diagram-row img:hover{
+    transform:scale(1.02);
+    box-shadow:0 8px 30px rgba(0,0,0,0.1);
+}
+.diagram-caption{
+    text-align:center;
+    font-size:0.9rem;
+    color:#888;
+    margin-top:-20px;
+    margin-bottom:30px;
+    font-weight:500;
+}
+
+/* ── Math / Formula Blocks ───────────────────── */
+.formula{
+    background:#111;
+    color:#f1f5f9;
+    font-family:'JetBrains Mono',monospace;
+    padding:18px 28px;
+    border-radius:12px;
+    font-size:1.05rem;
+    margin:24px 0;
+    text-align:center;
+    letter-spacing:0.03em;
+    box-shadow:0 4px 16px rgba(0,0,0,0.15);
+}
+
+/* ── Code / Example Callout ──────────────────── */
+.example-box{
+    background:white;
+    border:1px solid #e4e4e4;
+    padding:22px 26px;
+    border-radius:14px;
+    margin:28px 0;
+    box-shadow:0 2px 10px rgba(0,0,0,0.04);
+}
+.example-box .label{
+    font-size:0.8rem;
+    font-weight:700;
+    color:#7c3aed;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin-bottom:10px;
+}
+.example-box p{
+    margin-bottom:8px;
+    font-size:1.05rem;
+}
+.example-box code{
+    font-family:'JetBrains Mono',monospace;
+    background:#f4f4f5;
+    padding:2px 7px;
+    border-radius:5px;
+    font-size:0.95rem;
+    color:#1e40af;
+}
+
+/* ── Divider ─────────────────────────────────── */
+.divider{
+    border:none;
+    height:1px;
+    background:linear-gradient(90deg, transparent, #ddd, transparent);
+    margin:50px 0;
+}
+
+/* ── Footer ──────────────────────────────────── */
+.blog-footer{
+    text-align:center;
+    padding:40px 0 20px;
+    font-size:0.85rem;
+    color:#aaa;
+}
+
+/* ── Animations ──────────────────────────────── */
+@keyframes fadeUp{
+    from{ opacity:0; transform:translateY(24px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+.container > *{
+    animation: fadeUp 0.6s ease-out both;
+}
+.container > *:nth-child(1){ animation-delay:0.05s; }
+.container > *:nth-child(2){ animation-delay:0.1s; }
+.container > *:nth-child(3){ animation-delay:0.15s; }
+.container > *:nth-child(4){ animation-delay:0.2s; }
+
+/* ── Responsive ──────────────────────────────── */
+@media(max-width:640px){
+    .container{ padding:30px 20px 60px; }
+    h1{ font-size:2rem; }
+    h2{ font-size:1.4rem; margin-top:40px; }
+    .architecture{ gap:14px; }
+    .architecture .pill{ padding:12px 24px; font-size:1.05rem; }
+    .diagram-row{ flex-direction:column; align-items:center; }
+    .diagram-row img{ max-width:260px; }
+    .formula{ font-size:0.9rem; padding:14px 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- Back link -->
+<a href="web.html" class="back-link">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+    Back to Home
+</a>
+
+<!-- Meta -->
+<div class="blog-meta">
+    <span>AI &amp; Deep Learning</span>
+    <span class="dot"></span>
+    <span>10 min read</span>
+</div>
+
+<!-- Title -->
+<h1>Understanding the Transformer Encoder</h1>
+
+<p class="subtitle">
+    A deep-dive into how the Transformer processes data — from raw text to attention weights —
+    based on the <span class="highlight">"Attention Is All You Need"</span> paper by Google.
+</p>
+
+<hr class="divider">
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SECTION 1 — Intro                         -->
+<!-- ════════════════════════════════════════════ -->
+
+<p>
+    Before we start the Transformer architecture, let's build an intuition about how data is
+    processed in short.
+</p>
+
+<p>
+    Think of a Transformer as a device: it takes some input, takes a while to work on it
+    (the <span class="highlight">training phase</span>), and after that it understands the
+    meaning of words. The output may be generated at any phase of the model — even if it is
+    not trained it generates output, but with no meaning and random letters.
+</p>
+
+<p>
+    Look at the picture from the <em>"Attention Is All You Need"</em> paper released by
+    <strong>Google</strong> which changed the industry.
+</p>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SECTION 2 — High-Level Architecture       -->
+<!-- ════════════════════════════════════════════ -->
+
+<h2>High-Level Architecture</h2>
+
+<p>At a basic level, the Transformer is divided into two major components:</p>
+
+<div class="architecture">
+    <div class="arch-col">
+        <div class="pill">The Encoder</div>
+        <img src="blog_images/page1_img1.png" alt="Transformer Encoder architecture diagram">
+    </div>
+    <div class="arch-col">
+        <div class="pill">The Decoder</div>
+        <img src="blog_images/page1_img2.png" alt="Transformer Decoder architecture diagram">
+    </div>
+</div>
+
+<p class="question">
+    Before we interact with any model, it first needs training — i.e., allowing the model
+    to learn information, say meaning of a sentence. So where does this learning happen?
+</p>
+<p>
+    The answer is: <span class="answer">inside the Encoder.</span>
+</p>
+
+<p>Now let's take a look into the Encoder. It has:</p>
+
+<ul class="component-list">
+    <li><span class="num">1</span> Input Embedding</li>
+    <li><span class="num">2</span> Positional Encoder</li>
+    <li><span class="num">3</span> Multi-Head Attention</li>
+    <li><span class="num">4</span> Residual Blocks</li>
+    <li><span class="num">5</span> Feed-Forward Network</li>
+    <li><span class="num">6</span> Add &amp; Norm</li>
+</ul>
+
+<p>
+    We will get to know about all of these in a while. For now let's continue by jumping
+    back to the training process.
+</p>
+
+<hr class="divider">
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SECTION 3 — How Training Happens           -->
+<!-- ════════════════════════════════════════════ -->
+
+<h2>How Training Happens</h2>
+
+<p>
+    If any reader is reading this article right after finishing Diffusion Models and CNN —
+    don't revise your great knowledge, go with me in the flow.
+    <strong>CNN is completely different from Transformer.</strong>
+</p>
+
+<p>
+    Let's assume we took data from a text file. The data is converted into a number — mostly
+    a floating-point number, usually stored as a <strong>tensor</strong> datatype.
+</p>
+
+<p>
+    Of course we cannot represent the whole process, so let's take the famous dialogue:
+</p>
+
+<div class="example-box">
+    <div class="label">Example</div>
+    <p><strong>"Love is the death of duty."</strong></p>
+    <p>
+        This sentence will be <em>tokenized</em> by passing through a tokenizer. Consider the
+        vocabulary size is <strong>128</strong> (number of words in data = 128).
+    </p>
+</div>
+
+<div class="note">
+    <strong>Note:</strong> Some people use embedding vector length as length of vocabulary.
+    It may be sufficient for small data but for large data it is inefficient. There is no
+    strict rule — in theory, the embedding vector could be of any length.
+</div>
+
+<!-- ── Tokenizer / Embedding Diagram ── -->
+<img class="blog-img" src="blog_images/page2_img1.png" alt="Diagram showing the sentence 'Love is the death of duty' being tokenized into 6 tokens, then mapped through a Word Embedding Layer into 6 dense 128-dimensional vectors">
+
+<p>
+    Now these <strong>6 × 128 dimensional vectors</strong> will get into the Encoder block.
+</p>
+
+<hr class="divider">
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SECTION 4 — Positional Encoding            -->
+<!-- ════════════════════════════════════════════ -->
+
+<h2>Positional Encoding</h2>
+
+<p>
+    You can see in the Encoder diagram that the initial part contains a
+    <strong>Positional Encoder</strong>. Let's talk about it in detail.
+</p>
+
+<p>
+    We add a positional encoder because <span class="highlight">Transformers do not
+    understand word order by default</span>. So we add some additional information to each
+    word to remember the positions. For example:
+</p>
+
+<div class="example-box">
+    <div class="label">Why order matters</div>
+    <p><strong>"I love you"</strong> vs. <strong>"You love I"</strong></p>
+    <p>Both sentences contain the same words, but their meanings are different. Self-attention alone cannot distinguish this.</p>
+</div>
+
+<hr class="divider">
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SECTION 5 — Self-Attention                 -->
+<!-- ════════════════════════════════════════════ -->
+
+<h2>Self-Attention &amp; Key, Query, Value</h2>
+
+<p>
+    The positionally encoded tokens are passed to the <strong>Multi-Head Attention</strong>
+    block with Key, Query, and Value. Don't overthink these terms.
+</p>
+
+<p>
+    When I say "pass key, query, value" — these are all the same words (same embedding
+    vectors of <em>"love"</em>, <em>"is"</em>, …, <em>"duty"</em>) that we pass to the
+    Transformer encoder. But think of <em>why?</em>
+</p>
+
+<p>
+    That's the main role of <strong>self-attention</strong>: the Key and Query multiply each
+    other (those 6 same vectors multiply each other) to produce
+    <strong>attention scores</strong>. These attention scores
+    (w<sub>1</sub>, w<sub>2</sub>, w<sub>3</sub>, …, w<sub>6</sub>) are computed using the
+    dot product:
+</p>
+
+<div class="formula">
+    attention_scores(w₁, w₂) = |w₁| · |w₂| · cos θ
+</div>
+
+<div class="note">
+    <strong>Note:</strong> The embedding vectors don't only show a categorical value in
+    dimensional space. Every unit of the vector represents some meaning — i.e., consider a
+    128-dimensional vector: every unit represents how possible it is for this word to <em>be</em>
+    something (a score). Like in those 128 units, some could be
+    <em>animal, hat, vehicle, sea, …</em> indicating how possible the current word could be that concept.
+</div>
+
+<div class="note">
+    The input vectors are <strong>not unit vectors</strong> — the magnitude of vectors
+    varies, i.e., the same vector (word) may not pay much attention to itself.<br><br>
+    <strong>|B&gt;B| &lt; |B·D|</strong><br><br>
+    These vectors consist of a semantic meaning: if we consider an n-dimensional space, each
+    word represents a position that indicates it has a certain meaning in that position. Similar
+    words or synonyms will be surrounded by similar vectors.<br><br>
+    <em>Example: vectors for "dog", "cat", "rabbit" may cluster at one position — indicating they mean similar things.</em>
+</div>
+
+<p>
+    These attention scores show how much attention a word pays to another word. After
+    multiplying using the dot product method, we apply normalization on the attention scores
+    and call them <strong>attention weights</strong>:
+</p>
+
+<div class="formula">
+    attention_weights = Normalize( attention_scores )
+</div>
+
+<hr class="divider">
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SECTION 6 — Multi-Head Attention           -->
+<!-- ════════════════════════════════════════════ -->
+
+<h2>Multi-Head Attention (MHA)</h2>
+
+<p>
+    After positional embedding, the input embedding matrix <strong>(6 × 128)</strong> is
+    multiplied with weight matrices <strong>W<sub>Q</sub></strong>,
+    <strong>W<sub>K</sub></strong>, <strong>W<sub>V</sub></strong> of
+    <strong>(128 × 128)</strong> dimension. These weights are
+    <em>initialized randomly</em> at start.
+</p>
+
+<p>
+    The input embedding is multiplied with the Q, K, V weights, generating Q, K, V vectors:
+</p>
+
+<!-- ── Q, K, V Matrix Diagram ── -->
+<img class="blog-img" src="blog_images/page3_img1.png" alt="Detailed matrix diagram showing how the 6×128 Input Embedding is multiplied with Wq (128×128), Wk (128×128), and Wv (128×128) weight matrices to produce Q (6×128), K (6×128), and V (6×128) output matrices">
+
+<p>
+    Now you see we have 3 matrices — <strong>Q, K, V</strong> — which are eventually data
+    that were <em>transformed</em>. The input embeddings are transformed into Q, K, V.
+    As explained earlier, these 3 are similar data which were transformed from the same
+    input embedding vector.
+</p>
+
+<h3>What the Model Actually Learns</h3>
+
+<p>
+    More importantly, from an outside point of view: the model trains those
+    <strong>Q, K, V weight vectors</strong> — <span class="highlight">this is exactly
+    what the LLM is</span>. Even when we ship the model, we save the model weights
+    irrespective of the input data.
+</p>
+
+<div class="example-box">
+    <div class="label">Example — PyTorch</div>
+    <p>
+        The <code>torch.state_dict()</code> function in the torch library: whenever you
+        train a model, we save the model weights in our device and ship the
+        <code>.pth</code> file, where we then reuse those weights to predict.
+    </p>
+</div>
+
+<p>
+    This makes a good intuition about large language model training: we ultimately train
+    the model weights by initializing them with random values, then we train them frequently
+    on our data. When it reaches a certain accuracy, we stop the training.
+</p>
+
+<hr class="divider">
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SECTION 7 — MHA Attention Scores           -->
+<!-- ════════════════════════════════════════════ -->
+
+<h2>Computing Attention in MHA</h2>
+
+<p>
+    Remember the attention scores explained earlier in self-attention? The same concept
+    applies here too. This attention mechanism is similar across any model, but the handling
+    of data might be different (Bahdanau attention, causal attention, self-attention, etc.).
+</p>
+
+<p>In MHA, the attention scores are computed by multiplying Q and K values:</p>
+
+<div class="formula">
+    attention_scores = Q × K<sup>T</sup>
+</div>
+
+<p>
+    Then the attention scores are divided by <strong>√d<sub>k</sub></strong>, which is the
+    square root of the dimension of K. Logically Q and K also have the same dimension so
+    we can use either, but in the original <em>"Attention Is All You Need"</em> paper they
+    used d<sub>k</sub> with a square root:
+</p>
+
+<div class="formula">
+    attention_weights = Q × K<sup>T</sup> &frasl; √d<sub>k</sub>
+</div>
+
+<hr class="divider">
+
+<div class="blog-footer">
+    Written by Teja &nbsp;·&nbsp; 2025
+</div>
+
+</div><!-- / .container -->
+
+</body>
+</html>
