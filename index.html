@@ -1,495 +1,843 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Sai Teja Girada — CS undergrad at MVGR College of Engineering. Deep learning, NLP, efficient ML systems, and reinforcement learning.">
-<title>Sai Teja Girada</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sai Teja Girada — CS undergrad at MVGR College of Engineering. Deep learning, NLP, efficient ML systems, and reinforcement learning.">
+    <title>Sai Teja Girada</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sai Teja Girada">
+    <meta property="og:description" content="CS undergrad building efficient and interpretable ML systems. Research Intern at NIT Jamshedpur.">
+    <meta property="og:url" content="https://saitejagirada.github.io/">
 
-<!-- Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
-<div class="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="dark" data-type="VERTICAL" data-vanity="girada-sai-teja" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://in.linkedin.com/in/girada-sai-teja?trk=profile-badge">GIRADA SAI TEJA</a></div>
-              
-<style>
-/* ══════════════════════════════════════════════
-   RESET & VARIABLES (Minty Bootstrap theme)
-   ══════════════════════════════════════════════ */
-*{ margin:0; padding:0; box-sizing:border-box; }
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Sai Teja Girada">
+    <meta name="twitter:description" content="CS undergrad building efficient and interpretable ML systems.">
 
-:root{
-    --primary:     #78c2ad;
-    --primary-hover:#60a894;
-    --secondary:   #f3969a;
-    --body-color:  #5a5a5a;
-    --heading-color:#5a5a5a;
-    --bg:          #ffffff;
-    --border:      #dee2e6;
-    --gray-100:    #f8f9fa;
-    --gray-200:    #f7f7f9;
-    --font-body:   system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-heading: "Montserrat", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --root-font-size: 17px;
-}
+    <style>
+        body {
+            font-family: Times, "Times New Roman", Georgia, serif;
+            font-size: 17px;
+            line-height: 1.5;
+            color: #000;
+            background: #fff;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        a {
+            color: #0000ee;
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #551a8b;
+        }
+        h1 {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0 0 4px 0;
+        }
+        h2 {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin: 28px 0 10px 0;
+        }
+        h3 {
+            font-size: 1.05em;
+            font-weight: bold;
+            margin: 14px 0 2px 0;
+        }
+        p {
+            margin: 0 0 10px 0;
+        }
+        .photo {
+            float: left;
+            width: 180px;
+            border-radius: 6px;
+            margin: 4px 20px 10px 0;
+        }
+        .tagline {
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+        .links {
+            margin-bottom: 14px;
+        }
+        .clear {
+            clear: both;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 24px 0;
+        }
+        .divider {
+            text-align: center;
+            color: #aaa;
+            margin: 28px 0;
+            letter-spacing: 8px;
+        }
+        ul {
+            margin: 6px 0 12px 0;
+            padding-left: 22px;
+        }
+        li {
+            margin-bottom: 4px;
+        }
+        .meta {
+            color: #555;
+            font-style: italic;
+        }
+        .entry {
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .entry-head {
+            font-weight: bold;
+        }
+        .entry-sub {
+            color: #555;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+        .entry-head-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .entry-links {
+            font-size: 0.9em;
+        }
+        small {
+            color: #555;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        h1, h2 {
+            scroll-margin-top: 60px;
+        }
 
-html{ font-size:var(--root-font-size); }
+        /* ── Top Navigation ── */
+        .topnav {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            border-bottom: 1px solid #ccc;
+            padding: 8px 0;
+            margin-bottom: 24px;
+            font-size: 0.95em;
+            z-index: 10;
+        }
+        .topnav-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .topnav a {
+            color: #0000ee;
+        }
 
-body{
-    font-family:var(--font-body);
-    font-size:1rem;
-    font-weight:400;
-    line-height:1.5;
-    color:var(--body-color);
-    background:var(--bg);
-    -webkit-font-smoothing:antialiased;
-}
+        /* ── Open Source Section ── */
+        .oss-filters {
+            display: inline-flex;
+            gap: 2px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 2px;
+            margin: 4px 0 6px;
+        }
+        .oss-filter {
+            font-family: inherit;
+            font-size: 0.85em;
+            background: none;
+            color: #555;
+            border: none;
+            border-radius: 4px;
+            padding: 3px 11px;
+            cursor: pointer;
+        }
+        .oss-filter:hover {
+            color: #000;
+        }
+        .oss-filter.active {
+            background: #000;
+            color: #fff;
+        }
+        .oss-count {
+            font-size: 0.82em;
+            opacity: 0.7;
+            margin-left: 5px;
+        }
+        .oss-list {
+            display: flex;
+            flex-direction: column;
+            margin: 4px 0;
+        }
+        .oss-row {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 9px 4px;
+            border-bottom: 1px solid #e6e6e6;
+            text-decoration: none;
+            color: inherit;
+        }
+        .oss-row:hover {
+            background: #f6f6f6;
+        }
+        .oss-icon {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            position: relative;
+            top: 2px;
+        }
+        .oss-icon.merged { color: #8250df; }
+        .oss-icon.open { color: #1a7f37; }
+        .oss-icon.closed { color: #cf222e; }
+        .oss-title {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .oss-row:hover .oss-title {
+            text-decoration: underline;
+        }
+        .oss-repo {
+            font-family: "SF Mono", ui-monospace, Menlo, monospace;
+            font-size: 0.78em;
+            color: #888;
+            flex-shrink: 0;
+        }
+        .oss-date {
+            font-family: "SF Mono", ui-monospace, Menlo, monospace;
+            font-size: 0.78em;
+            color: #999;
+            flex-shrink: 0;
+            font-variant-numeric: tabular-nums;
+        }
+        .oss-orgs {
+            margin-top: 14px;
+        }
+        .oss-orgs-label {
+            display: block;
+            font-family: "SF Mono", ui-monospace, Menlo, monospace;
+            font-size: 0.72em;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        .oss-orgs-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .oss-org-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border: 1px solid #ddd;
+            border-radius: 999px;
+            padding: 3px 11px 3px 4px;
+            font-size: 0.85em;
+            text-decoration: none;
+            color: inherit;
+        }
+        .oss-org-chip:hover {
+            border-color: #000;
+        }
+        .oss-org-chip img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: block;
+        }
 
-a{
-    color:var(--primary);
-    text-decoration:underline;
-}
-a:hover{
-    color:var(--primary-hover);
-}
+        /* ── GitHub Contribution Graph ── */
+        .gh-graph {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .gh-graph svg.gh-cal {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .gh-month {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 10px;
+            fill: #555;
+        }
+        html.dark .gh-month {
+            fill: #999;
+        }
+        .gh-legend {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 5px;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #555;
+        }
+        html.dark .gh-legend {
+            color: #999;
+        }
+        .gh-graph .l0 { fill: #ebedf0; }
+        .gh-graph .l1 { fill: #9be9a8; }
+        .gh-graph .l2 { fill: #40c463; }
+        .gh-graph .l3 { fill: #30a14e; }
+        .gh-graph .l4 { fill: #216e39; }
+        html.dark .gh-graph .l0 { fill: #2a2f36; }
+        html.dark .gh-graph .l1 { fill: #0e4429; }
+        html.dark .gh-graph .l2 { fill: #006d32; }
+        html.dark .gh-graph .l3 { fill: #26a641; }
+        html.dark .gh-graph .l4 { fill: #39d353; }
+        .gh-graph-caption {
+            text-align: center;
+        }
+        .gh-tooltip {
+            position: absolute;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(4px);
+            transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+            background: #24292f;
+            color: #fff;
+            font-size: 12px;
+            line-height: 1;
+            padding: 6px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .gh-tooltip.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        html.dark .gh-tooltip {
+            background: #ddd;
+            color: #121212;
+        }
 
-h1,h2,h3,h4,h5,h6{
-    font-family:var(--font-heading);
-    font-weight:500;
-    line-height:1.2;
-    color:var(--heading-color);
-}
+        /* ── Blog Section ── */
+        .blog-entry {
+            margin-bottom: 14px;
+        }
+        .blog-entry a {
+            font-weight: bold;
+        }
+        .blog-desc {
+            color: #555;
+            font-size: 0.95em;
+            margin-top: 2px;
+        }
 
-/* ══════════════════════════════════════════════
-   NAVBAR — Dark, fixed top (like Vibha's)
-   ══════════════════════════════════════════════ */
-.navbar{
-    background:#343a40;
-    padding:0;
-    position:sticky;
-    top:0;
-    z-index:1000;
-}
-.navbar-inner{
-    max-width:1320px;
-    margin:0 auto;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 1.5rem;
-    height:56px;
-}
-.navbar-brand{
-    font-family:var(--font-heading);
-    font-weight:500;
-    font-size:1.15rem;
-    color:#fff;
-    text-decoration:none;
-}
-.navbar-brand:hover{ color:#fff; }
+        /* ── Theme toggle ── */
+        .theme-toggle {
+            margin-left: auto;
+            font-family: inherit;
+            font-size: 0.9em;
+            background: none;
+            border: 1px solid #ccc;
+            padding: 1px 10px;
+            cursor: pointer;
+            color: inherit;
+        }
 
-.nav-links{
-    list-style:none;
-    display:flex;
-    gap:0;
-}
-.nav-links a{
-    display:block;
-    padding:16px 16px;
-    font-size:0.9rem;
-    color:rgba(255,255,255,0.55);
-    text-decoration:none;
-    transition:color .15s;
-}
-.nav-links a:hover,
-.nav-links a.active{
-    color:rgba(255,255,255,0.85);
-}
+        /* ── Skills tags ── */
+        .skill-row {
+            margin-bottom: 4px;
+        }
+        .skill-row strong {
+            color: inherit;
+        }
 
-/* Hamburger */
-.menu-btn{
-    display:none;
-    background:none;
-    border:none;
-    cursor:pointer;
-    color:rgba(255,255,255,0.55);
-    font-size:1.5rem;
-}
+        /* ── Responsive ── */
+        @media (max-width: 560px) {
+            .photo {
+                float: none;
+                display: block;
+                width: 140px;
+                margin: 0 auto 12px;
+            }
+            .oss-repo, .oss-date { display: none; }
+        }
 
-/* ══════════════════════════════════════════════
-   ABOUT — Trestles Layout (image | divider | bio)
-   ══════════════════════════════════════════════ */
-.about-section{
-    max-width:1320px;
-    margin:0 auto;
-    padding:3rem 1.5rem;
-    display:flex;
-    gap:0;
-    align-items:flex-start;
-}
-
-/* Left: Avatar + Name + Links */
-.about-entity{
-    flex:0 0 300px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    text-align:center;
-    padding-right:2rem;
-}
-.about-image{
-    width:10em;
-    height:10em;
-    border-radius:50%;
-    object-fit:cover;
-    margin-bottom:1rem;
-}
-/* Placeholder when no photo */
-.about-avatar-placeholder{
-    width:7em; height:7em;
-    border-radius:50%;
-    background:linear-gradient(135deg, var(--primary), #56cc9d);
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--font-heading);
-    font-size:2.8rem;
-    font-weight:700;
-    color:#fff;
-    margin-bottom:1rem;
-}
-.about-entity h1{
-    font-size:calc(1.325rem + 0.9vw);
-    margin-bottom:0.8rem;
-}
-@media(min-width:1200px){
-    .about-entity h1{ font-size:2rem; }
-}
-
-.about-links{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    width:100%;
-    margin-top:0.5rem;
-}
-.about-links a{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    justify-content:center;
-    padding:8px 16px;
-    border:1px solid var(--primary);
-    border-radius:0.25rem;
-    color:var(--primary);
-    text-decoration:none;
-    font-size:0.88rem;
-    transition:all .15s;
-}
-.about-links a:hover{
-    background:var(--primary);
-    color:#fff;
-}
-.about-links a i{
-    font-size:1rem;
-}
-
-/* Vertical divider */
-.about-divider{
-    width:1px;
-    background:var(--border);
-    align-self:stretch;
-    flex-shrink:0;
-}
-
-/* Right: Bio text */
-.about-contents{
-    flex:1;
-    padding-left:2rem;
-    padding-top:0.5rem;
-}
-.about-contents p{
-    margin-bottom:1rem;
-    font-size:1rem;
-    line-height:1.5;
-    color:var(--body-color);
-}
-.about-contents h3{
-    font-size:calc(1.27rem + 0.24vw);
-    margin-top:1.5rem;
-    margin-bottom:0.5rem;
-}
-@media(min-width:1200px){
-    .about-contents h3{ font-size:1.45rem; }
-}
-
-/* ══════════════════════════════════════════════
-   GENERIC SECTION (Education, Experience, etc.)
-   ══════════════════════════════════════════════ */
-.content-section{
-    max-width:1320px;
-    margin:0 auto;
-    padding:2rem 1.5rem 2.5rem;
-    border-top:1px solid var(--border);
-}
-.content-section h2{
-    font-size:calc(1.29rem + 0.48vw);
-    margin-bottom:1.2rem;
-}
-@media(min-width:1200px){
-    .content-section h2{ font-size:1.65rem; }
-}
-
-.content-section p,
-.content-section li{
-    font-size:1rem;
-    line-height:1.5;
-    color:var(--body-color);
-}
-.content-section ul{
-    padding-left:2rem;
-    margin-bottom:1rem;
-}
-.content-section li{
-    margin-bottom:0.3rem;
-}
-
-/* Card-like block */
-.info-block{
-    margin-bottom:1.5rem;
-}
-.info-block h3{
-    font-size:calc(1.27rem + 0.24vw);
-    margin-bottom:0.25rem;
-}
-@media(min-width:1200px){
-    .info-block h3{ font-size:1.45rem; }
-}
-.info-block .subtitle{
-    font-size:0.95rem;
-    color:var(--body-color);
-    margin-bottom:0.5rem;
-}
-.info-block .meta{
-    font-size:0.88rem;
-    color:#888;
-    margin-bottom:0.5rem;
-    font-style:italic;
-}
-
-/* Skills tags */
-.skill-row{
-    margin-bottom:0.8rem;
-}
-.skill-row strong{
-    color:var(--heading-color);
-}
-
-/* Blog link list */
-.blog-list{
-    list-style:none;
-    padding:0;
-}
-.blog-list li{
-    padding:0.5rem 0;
-    border-bottom:1px solid var(--gray-200);
-}
-.blog-list li:last-child{ border-bottom:none; }
-.blog-list a{
-    font-size:1rem;
-    color:var(--primary);
-}
-.blog-list a:hover{
-    color:var(--primary-hover);
-}
-.blog-list .blog-desc{
-    font-size:0.88rem;
-    color:#888;
-    margin-top:2px;
-}
-
-/* ══════════════════════════════════════════════
-   FOOTER
-   ══════════════════════════════════════════════ */
-.footer{
-    text-align:center;
-    padding:2rem 1rem;
-    font-size:0.85rem;
-    color:#aaa;
-    border-top:1px solid var(--border);
-}
-
-/* ══════════════════════════════════════════════
-   RESPONSIVE
-   ══════════════════════════════════════════════ */
-@media(max-width:768px){
-    .menu-btn{ display:block; }
-    .nav-links{
-        display:none;
-        flex-direction:column;
-        position:absolute;
-        top:56px; left:0; right:0;
-        background:#343a40;
-        padding:8px 0;
-    }
-    .nav-links.open{ display:flex; }
-    .nav-links a{ padding:10px 24px; }
-
-    .about-section{
-        flex-direction:column;
-        align-items:center;
-        text-align:center;
-    }
-    .about-entity{
-        flex:none;
-        padding-right:0;
-        margin-bottom:1.5rem;
-    }
-    .about-divider{ display:none; }
-    .about-contents{
-        padding-left:0;
-        text-align:left;
-    }
-}
-</style>
+        /* ── Dark Mode ── */
+        html.dark body,
+        html.dark .topnav {
+            background: #121212;
+            color: #ddd;
+        }
+        html.dark a,
+        html.dark .topnav a {
+            color: #8ab4f8;
+        }
+        html.dark a:visited {
+            color: #c8a2f0;
+        }
+        html.dark .topnav,
+        html.dark hr,
+        html.dark .theme-toggle {
+            border-color: #444;
+        }
+        html.dark .oss-filters {
+            border-color: #444;
+        }
+        html.dark .oss-row {
+            border-bottom-color: #262626;
+        }
+        html.dark .oss-row:hover {
+            background: #1a1a1a;
+        }
+        html.dark .oss-filter.active {
+            background: #ddd;
+            color: #121212;
+        }
+        html.dark .oss-repo { color: #777; }
+        html.dark .oss-date { color: #6a6a6a; }
+        html.dark .oss-org-chip {
+            border-color: #444;
+        }
+        html.dark .oss-org-chip:hover {
+            border-color: #ddd;
+        }
+        html.dark .meta,
+        html.dark .entry-sub,
+        html.dark small,
+        html.dark .blog-desc {
+            color: #999;
+        }
+        html.dark .divider {
+            color: #555;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ══════════ NAVBAR ══════════ -->
-<nav class="navbar">
-    <div class="navbar-inner">
-        <a class="navbar-brand" href="#">Sai Teja Girada</a>
-        <button class="menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
-            <i class="bi bi-list"></i>
-        </button>
-        <ul class="nav-links">
-            <li><a href="#" class="active">About</a></li>
-            <li><a href="https://github.com/saitejagirada?tab=repositories" target="_blank">Projects</a></li>
-            <li><a href="https://drive.google.com/file/d/1No5le8JdzX5MOUS0WIdVKev0ZKyKtBMQ/view?usp=sharing" target="_blank">Resume</a></li>
-        </ul>
+<nav class="topnav">
+    <div class="topnav-inner">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#opensource">Open Source</a>
+        <a href="#github">GitHub</a>
+        <a href="#blogs">Blogs</a>
+        <a href="#skills">Skills</a>
+        <button class="theme-toggle" id="theme-toggle">dark</button>
     </div>
 </nav>
 
-<!-- ══════════ ABOUT — Trestles Layout ══════════ -->
-<section class="about-section">
+<img class="photo" src="blog_images/teja.jpeg" alt="Sai Teja Girada">
 
-    <!-- Left column: Avatar + Name + Links -->
-    <div class="about-entity">
-        <img src="blog_images/teja.jpeg" alt="Sai Teja Girada" class="about-image">
-        <h1>Sai Teja Girada</h1>
-        <div class="about-links">
-            <a href="https://www.linkedin.com/in/girada-sai-teja/" target="_blank"><i class="bi bi-linkedin"></i> linkedin</a>
-            <a href="https://github.com/saitejagirada" target="_blank"><i class="bi bi-github"></i> github</a>
-            <a href="mailto:saitejagirada@gmail.com"><i class="bi bi-envelope-fill"></i> saitejagirada at gmail dot com</a>
-            <a href="https://drive.google.com/file/d/1No5le8JdzX5MOUS0WIdVKev0ZKyKtBMQ/view?usp=sharing" target="_blank"><i class="bi bi-file-earmark-text"></i> resume</a>
-        </div>
+<h1 id="about">Sai Teja Girada</h1>
+
+<p class="links">
+    <a href="https://drive.google.com/file/d/1No5le8JdzX5MOUS0WIdVKev0ZKyKtBMQ/view?usp=sharing" target="_blank">Resume</a> /
+    <a href="https://github.com/saitejagirada" target="_blank">GitHub</a> /
+    <a href="https://www.linkedin.com/in/girada-sai-teja/" target="_blank">LinkedIn</a> /
+    <a href="mailto:saitejagirada@gmail.com">Email</a>
+</p>
+
+<p>
+    I am a Computer Science undergrad (B.Tech CSE) at
+    <a href="#">M.V.G.R College of Engineering</a>, Visakhapatnam,
+    interested in building efficient and interpretable machine learning systems.
+    I am currently a Research Intern at
+    <a href="#">NIT Jamshedpur</a> working under Prof. Dinesh Kumar on
+    federated learning with multi-agent reinforcement learning.
+</p>
+
+<p>
+    Previously, I've worked on historical document OCR with vision-language models,
+    GPT-style transformers with KV cache optimization, audio event detection,
+    and text classification with GloVe embeddings.
+</p>
+
+<p>
+    <small>Reach me at
+        <a href="mailto:saitejagirada@gmail.com">saitejagirada@gmail.com</a></small>
+</p>
+
+<div class="clear"></div>
+
+
+<!-- ══════════ EXPERIENCE ══════════ -->
+<h2 id="experience">Experience</h2>
+
+<div class="entry">
+    <div class="entry-head-row">
+        <span class="entry-head">NIT Jamshedpur
+            <span class="meta">· May 2026 – Present</span></span>
     </div>
+    <p class="entry-sub">Research Intern · Advisor: Prof. Dinesh Kumar</p>
+    <ul>
+        <li>Designing a FedMARL architecture that integrates federated learning with multi-agent reinforcement learning for distributed decision-making in edge networks.</li>
+        <li>Working on adaptive aggregation, communication-efficient training, and heterogeneous agent environments.</li>
+        <li>Conducting simulation-based evaluation of latency, energy consumption, resource utilization, and learning performance.</li>
+    </ul>
+</div>
 
-    <!-- Vertical divider -->
-    <div class="about-divider"></div>
 
-    <!-- Right column: Bio -->
-    <div class="about-contents">
-        <p>
-            Hi there 👋! I'm a Computer Science undergrad at
-            <a href="#">M.V.G.R College of Engineering</a>, Visakhapatnam.
-            My interests are in building efficient and interpretable machine learning systems.
-            I'm currently a Research Intern at
-            <a href="#">NIT Jamshedpur</a> working under Prof. Dinesh Kumar.
-            You can find my <a href="#">projects</a>, my
-            <a href="blog1.html">blog</a> and my
-            <a href="#">resume</a>.
-        </p>
-        <p>
-            At NIT Jamshedpur, I'm designing a FedMARL architecture that integrates
-            federated learning with multi-agent reinforcement learning for distributed
-            decision-making in edge networks. I focus on adaptive aggregation,
-            communication-efficient training, and heterogeneous agent environments.
-            Previously, I've worked on historical document OCR with vision-language models,
-            GPT-style transformers with KV cache optimization, audio event detection,
-            and text classification with GloVe embeddings.
-        </p>
 
-        <h3>Research Interests</h3>
-        <p>
-            Deep learning model evaluation and interpretability · Efficient fine-tuning
-            and representation learning · Audio signal processing and event detection ·
-            Machine learning systems and deployment pipelines
-        </p>
+<!-- ══════════ EDUCATION ══════════ -->
+<h2 id="education">Education</h2>
 
-        <h3>Education</h3>
-        <p>
-            <strong>B.Tech, Computer Science and Engineering</strong><br>
-            M.V.G.R College of Engineering, Visakhapatnam (2023 – 2027)<br>
-            GPA: 7.73/10.00<br>
-            <em>Courses: Natural Language Processing, Machine Learning, Data Analytics, Big Data</em>
-        </p>
-
-        <h3>Experience</h3>
-        <p>
-            <strong>Research Intern</strong> — NIT Jamshedpur (May 2026 – Present)<br>
-            <em>Prof. Dinesh Kumar</em>
-        </p>
-        <ul>
-            <li>Designing a FedMARL architecture integrating federated learning with multi-agent RL for distributed decision-making in edge networks.</li>
-            <li>Working on adaptive aggregation, communication-efficient training, and heterogeneous agent environments.</li>
-            <li>Conducting simulation-based evaluation of latency, energy consumption, resource utilization, and learning performance.</li>
-        </ul>
-
-        <h3>Projects</h3>
-
-        <p><strong>Hybrid Vision-Language Pipeline for Historical Document OCR & Correction</strong>
-            <em>(OpenCV, Florence-2, Gemini)</em></p>
-        <ul>
-            <li>Designed a multi-stage pipeline combining layout analysis, VLM, and language modeling to extract and correct text from complex multi-column historical documents.</li>
-            <li>Applied OpenCV-based projection profiling to segment layouts and preserve reading order.</li>
-            <li>Utilized Florence-2 for OCR and Gemini 1.5 for semantic reconstruction.</li>
-            <li>Evaluated using CER, WER, MER, and WIL metrics.</li>
-        </ul>
-
-        <p><strong>GPT-Styled Transformer with KV Cache</strong>
-            <em>(HuggingFace, PyTorch)</em></p>
-        <ul>
-            <li>Implemented a GPT-style Transformer from scratch with KV cache optimization for autoregressive inference.</li>
-            <li>Reduced per-token attention complexity from O(T²) to O(T), achieving ~10–30× faster decoding.</li>
-        </ul>
-
-        <p><strong>Snapping Siri — Voice Assistant System</strong>
-            <em>(Python, PyPI)</em></p>
-        <ul>
-            <li>Built a modular app that detects snap sounds to activate Siri.</li>
-            <li>Collected a custom dataset and trained an audio classification model for noisy conditions.</li>
-        </ul>
-
-        <p><strong>Text Classification using GloVe Embeddings</strong>
-            <em>(NLP, BERT, PyTorch)</em></p>
-        <ul>
-            <li>Implemented a text classification pipeline using pre-trained GloVe embeddings.</li>
-            <li>Designed and trained a neural network classifier for supervised text categorization.</li>
-        </ul>
-
-        <h3>Skills</h3>
-        <div class="skill-row"><strong>Languages:</strong> Python, Java, SQL, C/C++</div>
-        <div class="skill-row"><strong>Cloud & Tools:</strong> Azure, AWS, Git, Azure ML</div>
-        <div class="skill-row"><strong>Libraries:</strong> PyTorch, pandas, NumPy, scikit-learn, HuggingFace, NLTK</div>
-        <div class="skill-row"><strong>ML Expertise:</strong> Pre-training, fine-tuning, post-training, RL, interpretability, ML systems</div>
-
-        <h3>Blog</h3>
-        <ul class="blog-list">
-            <li>
-                <a href="blog1.html">Understanding the Transformer Encoder</a>
-                <div class="blog-desc">A deep-dive into attention, Q/K/V matrices, and how training works.</div>
-            </li>
-        </ul>
-
+<div class="entry">
+    <div class="entry-head-row">
+        <span class="entry-head">M.V.G.R College of Engineering, Visakhapatnam
+            <span class="meta">· 2023 – 2027</span></span>
     </div>
-</section>
+    <p class="entry-sub">B.Tech, Computer Science and Engineering · GPA: 7.73/10.00</p>
+    <p><small><em>Courses: Natural Language Processing, Machine Learning, Data Analytics, Big Data</em></small></p>
+</div>
 
-<!-- ══════════ FOOTER ══════════ -->
-<footer class="footer">
-    Sai Teja Girada · 2025
-</footer>
+
+
+<!-- ══════════ RESEARCH INTERESTS ══════════ -->
+<h2 id="research">Research Interests</h2>
+<p>
+    Deep learning model evaluation and interpretability · Efficient fine-tuning
+    and representation learning · Audio signal processing and event detection ·
+    Machine learning systems and deployment pipelines · Federated learning ·
+    Multi-agent reinforcement learning
+</p>
+
+
+
+<!-- ══════════ OPEN SOURCE ══════════ -->
+<h2 id="opensource">Open Source</h2>
+<p>Merged pull requests I've contributed to open source projects.</p>
+
+<div class="oss-filters" id="oss-filters">
+    <button class="oss-filter active" data-state="merged">
+        merged<span class="oss-count"></span>
+    </button>
+    <button class="oss-filter" data-state="open">
+        open<span class="oss-count"></span>
+    </button>
+    <button class="oss-filter" data-state="closed">
+        closed<span class="oss-count"></span>
+    </button>
+</div>
+
+<div class="oss-list" id="oss-list">
+    <!-- PRs are rendered by JavaScript below -->
+</div>
+
+<div class="oss-orgs" id="oss-orgs" hidden>
+    <span class="oss-orgs-label">Organizations</span>
+    <div class="oss-orgs-list"></div>
+</div>
+
+
+
+<!-- ══════════ GITHUB ══════════ -->
+<h2 id="github">GitHub</h2>
+<div class="gh-graph" id="gh-graph">
+    <noscript>
+        <a href="https://github.com/saitejagirada">
+            <img src="https://ghchart.rshah.org/saitejagirada"
+                 alt="Sai Teja Girada's GitHub contribution graph"
+                 style="width: 100%; max-width: 700px">
+        </a>
+    </noscript>
+</div>
+<p class="gh-graph-caption">
+    <small>
+        <span id="gh-graph-total"></span>
+        <a href="https://github.com/saitejagirada">github.com/saitejagirada</a>
+    </small>
+</p>
+
+
+
+<!-- ══════════ BLOGS ══════════ -->
+<h2 id="blogs">Blogs</h2>
+
+<div class="blog-entry">
+    <a href="blog1.html">Understanding the Transformer Encoder</a>
+    <div class="blog-desc">A deep-dive into attention, Q/K/V matrices, positional encoding, and how training works — based on the "Attention Is All You Need" paper.</div>
+</div>
+
+
+
+<!-- ══════════ SKILLS ══════════ -->
+<h2 id="skills">Skills</h2>
+<div class="skill-row"><strong>Languages:</strong> Python, Java, SQL, C/C++</div>
+<div class="skill-row"><strong>Cloud & Tools:</strong> Azure, AWS, Git, Azure ML</div>
+<div class="skill-row"><strong>Libraries:</strong> PyTorch, pandas, NumPy, scikit-learn, HuggingFace, NLTK</div>
+<div class="skill-row"><strong>ML Expertise:</strong> Pre-training, fine-tuning, post-training, RL, interpretability, ML systems</div>
+
+
+
+<p>
+    <small>Last updated July 2026 ·
+        <a href="mailto:saitejagirada@gmail.com">saitejagirada@gmail.com</a></small>
+</p>
+
+<script>
+/* ═══════════════════════════════════════════════
+   Open Source PRs — hardcoded data (no API proxy)
+   ═══════════════════════════════════════════════ */
+(function () {
+    var list = document.getElementById("oss-list");
+    var filters = document.getElementById("oss-filters");
+    if (!list || !filters) return;
+
+    var current = "merged";
+
+    /* GitHub-style state icons */
+    var ICONS = {
+        merged:
+            '<svg class="oss-icon merged" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5.45 5.154A4.25 4.25 0 0 0 9.25 7.5h1.378a2.251 2.251 0 1 1 0 1.5H9.25A5.734 5.734 0 0 1 5 7.123v3.505a2.25 2.25 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.95-.218ZM4.25 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm8.5-4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"/></svg>',
+        open:
+            '<svg class="oss-icon open" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"/></svg>',
+        closed:
+            '<svg class="oss-icon closed" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3.25 1A2.25 2.25 0 0 1 4 5.372v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.251 2.251 0 0 1 3.25 1Zm9.5 5.5a.75.75 0 0 1 .75.75v3.378a2.251 2.251 0 1 1-1.5 0V7.25a.75.75 0 0 1 .75-.75Zm-2.03-5.273a.75.75 0 0 1 1.06 0l.97.97.97-.97a.749.749 0 1 1 1.06 1.06l-.97.97.97.97a.749.749 0 1 1-1.06 1.06l-.97-.97-.97.97a.749.749 0 1 1-1.06-1.06l.97-.97-.97-.97a.75.75 0 0 1 0-1.06ZM3.25 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm9.5 0a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Z"/></svg>'
+    };
+
+    /* Your merged PRs — from the screenshot */
+    var byState = {
+        merged: [
+            {
+                title: "fix: add warning for Gmail SMTP username mismatch and fallback to fromEmail",
+                url: "https://github.com/SMS2Email/SMS2Email/pull/108",
+                nameWithOwner: "SMS2Email/SMS2Email",
+                date: "2026-07-25"
+            },
+            {
+                title: "Add bias correction support for Adam mode in FedOpt",
+                url: "https://github.com/makgyver/fluke/pull/33",
+                nameWithOwner: "makgyver/fluke",
+                date: "2026-07-25"
+            }
+        ],
+        open: [],
+        closed: []
+    };
+
+    function esc(s) {
+        return String(s).replace(/[&<>"]/g, function (c) {
+            return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c];
+        });
+    }
+
+    function fmtDate(iso) {
+        var d = new Date(iso);
+        if (isNaN(d)) return "";
+        return d.toLocaleDateString("en-US", {
+            month: "short", day: "numeric", year: "numeric"
+        });
+    }
+
+    function render() {
+        var items = byState[current] || [];
+        if (!items.length) {
+            list.innerHTML =
+                '<p style="padding:9px 4px; color:#555; font-style:italic;">No ' +
+                current + " pull requests yet.</p>";
+            return;
+        }
+        var html = items
+            .map(function (pr) {
+                return (
+                    '<a class="oss-row" href="' + esc(pr.url) +
+                    '" target="_blank" rel="noopener">' +
+                    ICONS[current] +
+                    '<span class="oss-title">' + esc(pr.title) + "</span>" +
+                    '<span class="oss-repo">' + esc(pr.nameWithOwner) + "</span>" +
+                    '<span class="oss-date">' + esc(fmtDate(pr.date)) + "</span></a>"
+                );
+            })
+            .join("");
+        list.innerHTML = html;
+    }
+
+    /* Update counts */
+    filters.querySelectorAll(".oss-filter").forEach(function (btn) {
+        var st = btn.getAttribute("data-state");
+        var count = byState[st].length;
+        btn.querySelector(".oss-count").textContent = count ? " " + count : "";
+    });
+
+    /* Render orgs from merged PRs */
+    var orgsEl = document.getElementById("oss-orgs");
+    if (orgsEl && byState.merged.length) {
+        var seen = {};
+        var orgs = [];
+        byState.merged.forEach(function (pr) {
+            var org = pr.nameWithOwner.split("/")[0];
+            if (!seen[org]) {
+                seen[org] = true;
+                orgs.push(org);
+            }
+        });
+        if (orgs.length) {
+            orgsEl.querySelector(".oss-orgs-list").innerHTML = orgs
+                .map(function (org) {
+                    return (
+                        '<a class="oss-org-chip" href="https://github.com/' + esc(org) +
+                        '" target="_blank" rel="noopener">' +
+                        '<img src="https://github.com/' + esc(org) +
+                        '.png?size=40" alt="" loading="lazy" ' +
+                        "onerror=\"this.style.display='none'\" />" +
+                        "<span>" + esc(org) + "</span></a>"
+                    );
+                })
+                .join("");
+            orgsEl.hidden = false;
+        }
+    }
+
+    render();
+
+    /* Filter clicks */
+    filters.addEventListener("click", function (e) {
+        var btn = e.target.closest(".oss-filter");
+        if (!btn) return;
+        filters.querySelectorAll(".oss-filter").forEach(function (b) {
+            b.classList.remove("active");
+        });
+        btn.classList.add("active");
+        current = btn.getAttribute("data-state");
+        render();
+    });
+})();
+
+/* ═══════════════════════════════════════════════
+   GitHub Contribution Graph — live from API
+   ═══════════════════════════════════════════════ */
+(function () {
+    var container = document.getElementById("gh-graph");
+    var totalEl = document.getElementById("gh-graph-total");
+
+    fetch(
+        "https://github-contributions-api.jogruber.de/v4/saitejagirada?y=last"
+    )
+        .then(function (r) {
+            if (!r.ok) throw new Error(r.status);
+            return r.json();
+        })
+        .then(function (data) {
+            var days = data.contributions;
+            if (!days || !days.length) return;
+            var cell = 11, step = 14;
+            var firstDow = new Date(days[0].date + "T00:00:00").getDay();
+            var weeks = Math.ceil((days.length + firstDow) / 7);
+            var labelH = 16;
+            var w = weeks * step - (step - cell);
+            var h = 7 * step - (step - cell) + labelH;
+            var svg =
+                '<svg class="gh-cal" viewBox="0 0 ' + w + " " + h +
+                '" role="img" aria-label="GitHub contribution graph">';
+            var months = [
+                "Jan","Feb","Mar","Apr","May","Jun",
+                "Jul","Aug","Sep","Oct","Nov","Dec"
+            ];
+            var lastMonth = -1;
+            for (var i = 0; i < days.length; i++) {
+                var d = days[i];
+                var pos = i + firstDow;
+                var x = Math.floor(pos / 7) * step;
+                var y = (pos % 7) * step + labelH;
+                var m = new Date(d.date + "T00:00:00").getMonth();
+                if (m !== lastMonth) {
+                    if (i > 0 && x < w - 30) {
+                        svg +=
+                            '<text x="' + (pos % 7 === 0 ? x : x + step) +
+                            '" y="10" class="gh-month">' + months[m] + "</text>";
+                    }
+                    lastMonth = m;
+                }
+                var dt = new Date(d.date + "T00:00:00");
+                var label =
+                    (d.count === 1 ? "1 contribution" : d.count + " contributions") +
+                    " on " + months[dt.getMonth()] + " " + dt.getDate() + ", " +
+                    dt.getFullYear();
+                svg +=
+                    '<rect x="' + x + '" y="' + y +
+                    '" width="' + cell + '" height="' + cell +
+                    '" rx="2" class="l' + d.level +
+                    '" data-label="' + label + '"></rect>';
+            }
+            svg += "</svg>";
+            var legend =
+                '<span class="gh-legend">Less ' +
+                '<svg viewBox="0 0 70 11" width="70" height="11">';
+            for (var l = 0; l <= 4; l++) {
+                legend +=
+                    '<rect x="' + l * 14 +
+                    '" y="0" width="11" height="11" rx="2" class="l' +
+                    l + '"></rect>';
+            }
+            legend += "</svg> More</span>";
+            container.innerHTML = svg + legend;
+
+            /* tooltip on hover */
+            var tip = document.createElement("div");
+            tip.className = "gh-tooltip";
+            document.body.appendChild(tip);
+            var svgEl = container.querySelector("svg");
+            svgEl.addEventListener("mouseover", function (e) {
+                var label = e.target.getAttribute && e.target.getAttribute("data-label");
+                if (!label) return;
+                tip.textContent = label;
+                var box = e.target.getBoundingClientRect();
+                var left = window.scrollX + box.left + box.width / 2 - tip.offsetWidth / 2;
+                left = Math.max(4, Math.min(left, document.documentElement.scrollWidth - tip.offsetWidth - 4));
+                tip.style.left = left + "px";
+                tip.style.top = window.scrollY + box.top - tip.offsetHeight - 7 + "px";
+                tip.classList.add("show");
+            });
+            svgEl.addEventListener("mouseout", function () {
+                tip.classList.remove("show");
+            });
+
+            if (data.total && data.total.lastYear != null) {
+                totalEl.textContent =
+                    data.total.lastYear + " contributions in the last year · ";
+            }
+        })
+        .catch(function () {
+            container.innerHTML =
+                '<a href="https://github.com/saitejagirada">' +
+                '<img src="https://ghchart.rshah.org/saitejagirada" ' +
+                'alt="GitHub contribution graph" style="width:100%"></a>';
+        });
+})();
+
+/* ═══════════════════════════════════════════════
+   Dark Mode Toggle
+   ═══════════════════════════════════════════════ */
+(function () {
+    var btn = document.getElementById("theme-toggle");
+    function apply(dark) {
+        document.documentElement.classList.toggle("dark", dark);
+        btn.textContent = dark ? "light" : "dark";
+    }
+    apply(localStorage.getItem("theme") === "dark");
+    btn.addEventListener("click", function () {
+        var dark = !document.documentElement.classList.contains("dark");
+        apply(dark);
+        localStorage.setItem("theme", dark ? "dark" : "light");
+    });
+})();
+</script>
 
 </body>
 </html>
