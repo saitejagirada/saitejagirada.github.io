@@ -596,7 +596,8 @@
 
 <script>
 /* ═══════════════════════════════════════════════
-   Open Source PRs — hardcoded data (no API proxy)
+   Open Source PRs — live from GitHub API with
+   static fallback (auto-syncs on every page load)
    ═══════════════════════════════════════════════ */
 (function () {
     var list = document.getElementById("oss-list");
@@ -604,6 +605,7 @@
     if (!list || !filters) return;
 
     var current = "merged";
+    var GITHUB_USER = "saitejagirada";
 
     /* GitHub-style state icons */
     var ICONS = {
@@ -615,20 +617,19 @@
             '<svg class="oss-icon closed" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3.25 1A2.25 2.25 0 0 1 4 5.372v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.251 2.251 0 0 1 3.25 1Zm9.5 5.5a.75.75 0 0 1 .75.75v3.378a2.251 2.251 0 1 1-1.5 0V7.25a.75.75 0 0 1 .75-.75Zm-2.03-5.273a.75.75 0 0 1 1.06 0l.97.97.97-.97a.749.749 0 1 1 1.06 1.06l-.97.97.97.97a.749.749 0 1 1-1.06 1.06l-.97-.97-.97.97a.749.749 0 1 1-1.06-1.06l.97-.97-.97-.97a.75.75 0 0 1 0-1.06ZM3.25 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm9.5 0a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Z"/></svg>'
     };
 
-    /* Your merged PRs — from the screenshot */
-    var byState = {
+    /* ── PRs to never show (add URLs here to hide them) ── */
+    var BLOCKED = [
+        "https://github.com/p-e-w/heretic/pull/171"
+    ];
+
+    /* ── Static fallback (accurate as of 2026-09-07) ── */
+    var FALLBACK = {
         merged: [
-            {
-                title: "fix(urunc-cleanup): remove unnecessary k3s volume mount and redundant label removal",
-                url: "https://github.com/urunc-dev/urunc/pull/994",
-                nameWithOwner: "urunc-dev/urunc",
-                date: "2026-08-26"
-            },
             {
                 title: "fix: add warning for Gmail SMTP username mismatch and fallback to fromEmail",
                 url: "https://github.com/SMS2Email/SMS2Email/pull/108",
                 nameWithOwner: "SMS2Email/SMS2Email",
-                date: "2026-07-25"
+                date: "2026-07-26"
             },
             {
                 title: "Add bias correction support for Adam mode in FedOpt",
@@ -637,9 +638,37 @@
                 date: "2026-07-25"
             }
         ],
-        open: [],
-        closed: []
+        open: [
+            {
+                title: "feat: Add query-free KV cache compression (KeyDiff)",
+                url: "https://github.com/ml-explore/mlx-lm/pull/1852",
+                nameWithOwner: "ml-explore/mlx-lm",
+                date: "2026-09-06"
+            },
+            {
+                title: "fix(urunc-cleanup): remove unnecessary k3s volume mount and redundant label removal",
+                url: "https://github.com/urunc-dev/urunc/pull/994",
+                nameWithOwner: "urunc-dev/urunc",
+                date: "2026-08-26"
+            }
+        ],
+        closed: [
+            {
+                title: "fix: hide SMTP username field for Gmail users to prevent auth errors",
+                url: "https://github.com/SMS2Email/SMS2Email/pull/107",
+                nameWithOwner: "SMS2Email/SMS2Email",
+                date: "2026-07-13"
+            },
+            {
+                title: "fix: hide SMTP username field for Gmail users to prevent auth errors",
+                url: "https://github.com/SMS2Email/SMS2Email/pull/106",
+                nameWithOwner: "SMS2Email/SMS2Email",
+                date: "2026-07-13"
+            }
+        ]
     };
+
+    var byState = { merged: [], open: [], closed: [] };
 
     function esc(s) {
         return String(s).replace(/[&<>"]/g, function (c) {
@@ -678,43 +707,51 @@
         list.innerHTML = html;
     }
 
-    /* Update counts */
-    filters.querySelectorAll(".oss-filter").forEach(function (btn) {
-        var st = btn.getAttribute("data-state");
-        var count = byState[st].length;
-        btn.querySelector(".oss-count").textContent = count ? " " + count : "";
-    });
-
-    /* Render orgs from merged PRs */
-    var orgsEl = document.getElementById("oss-orgs");
-    if (orgsEl && byState.merged.length) {
-        var seen = {};
-        var orgs = [];
-        byState.merged.forEach(function (pr) {
-            var org = pr.nameWithOwner.split("/")[0];
-            if (!seen[org]) {
-                seen[org] = true;
-                orgs.push(org);
-            }
+    function updateCounts() {
+        filters.querySelectorAll(".oss-filter").forEach(function (btn) {
+            var st = btn.getAttribute("data-state");
+            var count = byState[st].length;
+            btn.querySelector(".oss-count").textContent = count ? " " + count : "";
         });
-        if (orgs.length) {
-            orgsEl.querySelector(".oss-orgs-list").innerHTML = orgs
-                .map(function (org) {
-                    return (
-                        '<a class="oss-org-chip" href="https://github.com/' + esc(org) +
-                        '" target="_blank" rel="noopener">' +
-                        '<img src="https://github.com/' + esc(org) +
-                        '.png?size=40" alt="" loading="lazy" ' +
-                        "onerror=\"this.style.display='none'\" />" +
-                        "<span>" + esc(org) + "</span></a>"
-                    );
-                })
-                .join("");
-            orgsEl.hidden = false;
+    }
+
+    function renderOrgs() {
+        var orgsEl = document.getElementById("oss-orgs");
+        var allPrs = [].concat(byState.merged, byState.open, byState.closed);
+        if (orgsEl && allPrs.length) {
+            var seen = {};
+            var orgs = [];
+            allPrs.forEach(function (pr) {
+                var org = pr.nameWithOwner.split("/")[0];
+                if (!seen[org]) {
+                    seen[org] = true;
+                    orgs.push(org);
+                }
+            });
+            if (orgs.length) {
+                orgsEl.querySelector(".oss-orgs-list").innerHTML = orgs
+                    .map(function (org) {
+                        return (
+                            '<a class="oss-org-chip" href="https://github.com/' + esc(org) +
+                            '" target="_blank" rel="noopener">' +
+                            '<img src="https://github.com/' + esc(org) +
+                            '.png?size=40" alt="" loading="lazy" ' +
+                            "onerror=\"this.style.display='none'\" />" +
+                            "<span>" + esc(org) + "</span></a>"
+                        );
+                    })
+                    .join("");
+                orgsEl.hidden = false;
+            }
         }
     }
 
-    render();
+    function bootstrap(data) {
+        byState = data;
+        updateCounts();
+        renderOrgs();
+        render();
+    }
 
     /* Filter clicks */
     filters.addEventListener("click", function (e) {
@@ -727,6 +764,70 @@
         current = btn.getAttribute("data-state");
         render();
     });
+
+    /* Show loading state initially */
+    list.innerHTML =
+        '<p style="padding:9px 4px; color:#555; font-style:italic;">Loading contributions\u2026</p>';
+
+    /* ── Live fetch from GitHub Search API ── */
+    fetch(
+        "https://api.github.com/search/issues?q=author:" + GITHUB_USER +
+        "+type:pr&sort=created&order=desc&per_page=100"
+    )
+        .then(function (r) {
+            if (!r.ok) throw new Error(r.status);
+            return r.json();
+        })
+        .then(function (data) {
+            var items = data.items || [];
+            if (!items.length) throw new Error("empty");
+
+            var live = { merged: [], open: [], closed: [] };
+
+            items.forEach(function (item) {
+                /* Skip blocked PRs */
+                if (BLOCKED.indexOf(item.html_url) !== -1) return;
+
+                var prMeta = item.pull_request || {};
+                var mergedAt = prMeta.merged_at;
+                var state;
+                if (mergedAt) {
+                    state = "merged";
+                } else if (item.state === "closed") {
+                    state = "closed";
+                } else {
+                    state = "open";
+                }
+
+                var repoUrl = item.repository_url || "";
+                var parts = repoUrl.split("/");
+                var nameWithOwner = parts.slice(-2).join("/");
+
+                var dateStr = mergedAt
+                    ? mergedAt.substring(0, 10)
+                    : (item.created_at || "").substring(0, 10);
+
+                live[state].push({
+                    title: item.title,
+                    url: item.html_url,
+                    nameWithOwner: nameWithOwner,
+                    date: dateStr
+                });
+            });
+
+            /* Sort each bucket: newest first */
+            ["merged", "open", "closed"].forEach(function (s) {
+                live[s].sort(function (a, b) {
+                    return b.date.localeCompare(a.date);
+                });
+            });
+
+            bootstrap(live);
+        })
+        .catch(function () {
+            /* API unavailable or rate-limited — use static fallback */
+            bootstrap(FALLBACK);
+        });
 })();
 
 /* ═══════════════════════════════════════════════
